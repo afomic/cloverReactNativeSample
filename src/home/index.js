@@ -6,7 +6,7 @@ import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 
 class HomeScreen extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       loading: true,
       token: "",
@@ -15,6 +15,7 @@ class HomeScreen extends Component {
     };
     this.getAuthToken = this.getAuthToken.bind(this);
     this.requestPermission = this.requestPermission.bind(this);
+    this.sendCloverDetails=this.sendCloverDetails.bind(this);
   }
 
   componentDidMount() {
@@ -35,8 +36,22 @@ class HomeScreen extends Component {
         <Text style={{color: "white"}}>GET TOKEN</Text>
 
       </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={this.sendCloverDetails}>
+        <Text style={{color: "white"}}>Send Details</Text>
+
+      </TouchableOpacity>
 
     </View>
+  }
+  async sendCloverDetails(){
+    const {token,merchantId,deviceId}=this.state;
+    const payload={
+      authToken:token,
+      merchantId,
+      deviceId
+    };
+    const response= await sendCloverDetails(payload);
+    console.log(response);
   }
 
   getAuthToken() {
@@ -87,6 +102,7 @@ class HomeScreen extends Component {
         // …
       });
   }
+
 
   requestPermission() {
     request(PERMISSIONS.ANDROID.GET_ACCOUNTS).then(result => {
